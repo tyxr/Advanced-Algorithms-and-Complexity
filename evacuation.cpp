@@ -4,15 +4,15 @@
 using namespace std;
 #define arraysize 201
 int maxData = 0x7fffffff;
-int capacity[arraysize][arraysize]; //¼ÇÂ¼²ĞÁôÍøÂçµÄÈİÁ¿
-int flow[arraysize];                //±ê¼Ç´ÓÔ´µãµ½µ±Ç°½ÚµãÊµ¼Ê»¹Ê£¶àÉÙÁ÷Á¿¿ÉÓÃ
-int pre[arraysize];                 //±ê¼ÇÔÚÕâÌõÂ·¾¶ÉÏµ±Ç°½ÚµãµÄÇ°Çı,Í¬Ê±±ê¼Ç¸Ã½ÚµãÊÇ·ñÔÚ¶ÓÁĞÖĞ
+int capacity[arraysize][arraysize]; //è®°å½•æ®‹ç•™ç½‘ç»œçš„å®¹é‡
+int flow[arraysize];                //æ ‡è®°ä»æºç‚¹åˆ°å½“å‰èŠ‚ç‚¹å®é™…è¿˜å‰©å¤šå°‘æµé‡å¯ç”¨
+int pre[arraysize];                 //æ ‡è®°åœ¨è¿™æ¡è·¯å¾„ä¸Šå½“å‰èŠ‚ç‚¹çš„å‰é©±,åŒæ—¶æ ‡è®°è¯¥èŠ‚ç‚¹æ˜¯å¦åœ¨é˜Ÿåˆ—ä¸­
 int n,m;
 queue<int> myqueue;
 int BFS(int src,int des)
 {
     int i,j;
-    while(!myqueue.empty())       //¶ÓÁĞÇå¿Õ
+    while(!myqueue.empty())       //é˜Ÿåˆ—æ¸…ç©º
         myqueue.pop();
     for(i=1;i<m+1;++i)
     {
@@ -25,19 +25,19 @@ int BFS(int src,int des)
     {
         int index = myqueue.front();
         myqueue.pop();
-        if(index == des)            //ÕÒµ½ÁËÔö¹ãÂ·¾¶
+        if(index == des)            //æ‰¾åˆ°äº†å¢å¹¿è·¯å¾„
             break;
         for(i=1;i<m+1;++i)
         {
             if(i!=src && capacity[index][i]>0 && pre[i]==-1)
             {
-                 pre[i] = index; //¼ÇÂ¼Ç°Çı
-                 flow[i] = min(capacity[index][i],flow[index]);   //¹Ø¼ü£ºµü´úµÄÕÒµ½ÔöÁ¿
+                 pre[i] = index; //è®°å½•å‰é©±
+                 flow[i] = min(capacity[index][i],flow[index]);   //å…³é”®ï¼šè¿­ä»£çš„æ‰¾åˆ°å¢é‡
                  myqueue.push(i);
             }
         }
     }
-    if(pre[des]==-1)      //²ĞÁôÍ¼ÖĞ²»ÔÙ´æÔÚÔö¹ãÂ·¾¶
+    if(pre[des]==-1)      //æ®‹ç•™å›¾ä¸­ä¸å†å­˜åœ¨å¢å¹¿è·¯å¾„
         return -1;
     else
         return flow[des];
@@ -48,12 +48,12 @@ int maxFlow(int src,int des)
     int sumflow = 0;
     while((increasement=BFS(src,des))!=-1)
     {
-         int k = des;          //ÀûÓÃÇ°ÇıÑ°ÕÒÂ·¾¶
+         int k = des;          //åˆ©ç”¨å‰é©±å¯»æ‰¾è·¯å¾„
          while(k!=src)
          {
               int last = pre[k];
-              capacity[last][k] -= increasement; //¸Ä±äÕıÏò±ßµÄÈİÁ¿
-              capacity[k][last] += increasement; //¸Ä±ä·´Ïò±ßµÄÈİÁ¿
+              capacity[last][k] -= increasement; //æ”¹å˜æ­£å‘è¾¹çš„å®¹é‡
+              capacity[k][last] += increasement; //æ”¹å˜åå‘è¾¹çš„å®¹é‡
               k = last;
          }
          sumflow += increasement;
@@ -75,9 +75,9 @@ int main()
         for(i=0;i<n;++i)
         {
             cin>>start>>end>>ci;
-            if(start == end)               //¿¼ÂÇÆğµãÖÕµãÏàÍ¬µÄÇé¿ö
+            if(start == end)               //è€ƒè™‘èµ·ç‚¹ç»ˆç‚¹ç›¸åŒçš„æƒ…å†µ
                continue;
-            capacity[start][end] +=ci;     //´Ë´¦×¢Òâ¿ÉÄÜ³öÏÖ¶àÌõÍ¬Ò»ÆğµãÖÕµãµÄÇé¿ö
+            capacity[start][end] +=ci;     //æ­¤å¤„æ³¨æ„å¯èƒ½å‡ºç°å¤šæ¡åŒä¸€èµ·ç‚¹ç»ˆç‚¹çš„æƒ…å†µ
         }
         cout<<maxFlow(1,m)<<endl;
     }
